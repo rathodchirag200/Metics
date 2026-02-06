@@ -1,0 +1,12 @@
+swiper-container::part(pagination) {
+  bottom: -25px;
+}
+
+swiper-container::part(pagination-bullet) {
+  background: #d1d1d1;
+  opacity: 1;
+}
+
+swiper-container::part(pagination-bullet-active) {
+  background: #000;
+}

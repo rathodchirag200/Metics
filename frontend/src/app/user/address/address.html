@@ -1,0 +1,45 @@
+<div class="flex items-center justify-center bg-white px-4 sm:px-8 py-16">
+  <div class="w-full max-w-6xl flex flex-col md:flex-row items-center justify-between gap-12 md:gap-24">
+
+
+    <div class="w-full md:w-1/2">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-center md:text-left">
+        Add Shipping <span class="text-black">Address</span>
+      </h2>
+
+      <div class="space-y-4 sm:space-y-5">
+
+        <input type="text" placeholder="Full Name" [(ngModel)]="fullName" name="fullName"
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base" />
+
+        <input type="text" placeholder="Phone Number" [(ngModel)]="phone" name="phone"
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base" />
+
+        <input type="text" placeholder="Pincode" [(ngModel)]="pin" name="pin"
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base" />
+
+        <textarea rows="3" placeholder="Address (Area & Street)" [(ngModel)]="address" name="address"
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base"></textarea>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="text" placeholder="City/District/Town" [(ngModel)]="city" name="city"
+            class="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base" />
+
+          <input type="text" placeholder="State" [(ngModel)]="state" name="state"
+            class="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm sm:text-base" />
+        </div>
+
+        <button (click)="submitAddress()"
+          class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition font-semibold text-sm sm:text-base">
+          SAVE ADDRESS
+        </button>
+
+      </div>
+    </div>
+
+    <div class="w-full md:w-1/2 flex justify-center mb-10 md:mb-0">
+      <img src="/loc.jpg" alt="Black Address Illustration" class="object-contain">
+    </div>
+
+  </div>
+</div>

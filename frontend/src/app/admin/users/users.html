@@ -1,0 +1,83 @@
+<div class="p-6 md:p-10 pt-24 min-h-screen md:pl-80 relative sm:top-30 flex flex-col gap-10 bg-gray-50">
+
+  <!-- Header -->
+  <div class="flex flex-col gap-2">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight">
+      All Users
+    </h1>
+    <p class="text-gray-600 text-sm sm:text-base">
+      Manage all your store users from one place
+    </p>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-10 text-gray-500 text-lg">
+    Loading users...
+  </div>
+
+  <div class="hidden md:block bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+
+    <table class="w-full border-collapse">
+
+      <thead class="bg-gray-100">
+        <tr class="text-left text-gray-700 text-sm uppercase tracking-wider border-b border-gray-200">
+          <th class="p-5">#</th>
+          <th class="p-5">Profile</th>
+          <th class="p-5">Username</th>
+          <th class="p-5">Email</th>
+          <th class="p-5">Joined</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let user of users; let i = index" class="border-b last:border-b-0 hover:bg-gray-50 transition">
+
+          <td class="p-5 font-semibold text-gray-900">{{ i + 1 }}</td>
+
+          <td class="p-5">
+            <img [src]="getImage(user.images)"
+              class="w-14 h-14 rounded-full object-cover border border-gray-300 shadow-sm" />
+          </td>
+
+          <td class="p-5 font-medium text-gray-900">
+            {{ user.username }}
+          </td>
+
+          <td class="p-5 text-gray-600 break-all">
+            {{ user.email }}
+          </td>
+
+          <td class="p-5 text-gray-500">
+            {{ user.createdAt | date:'dd MMM yyyy' }}
+          </td>
+
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:hidden">
+
+    <div *ngFor="let user of users; let i = index"
+      class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col items-center text-center gap-3">
+
+      <img [src]="getImage(user.images)" class="w-24 h-24 rounded-full object-cover border border-gray-300 shadow-sm" />
+
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ user.username }}
+      </h3>
+
+      <p class="text-gray-600 text-sm break-all">
+        {{ user.email }}
+      </p>
+
+      <p class="text-gray-500 text-sm">
+        Joined: {{ user.createdAt | date:'dd MMM yyyy' }}
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

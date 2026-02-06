@@ -1,0 +1,186 @@
+<div class="bg-white p-4 sm:p-6 md:pl-72 relative top-30 min-h-screen transition-all duration-300">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f172a]">
+          Products
+        </h1>
+        <p class="text-gray-500 text-sm sm:text-base">
+          Manage all your store products here
+        </p>
+      </div>
+
+      <button routerLink="/admin/home"
+        class="bg-[#0f172a] text-white px-5 py-3 rounded-lg font-semibold w-full sm:w-auto hover:bg-black transition-colors">
+        + Add Product
+      </button>
+    </div>
+
+    <div class="border rounded-3xl overflow-hidden shadow-sm">
+      @for (product of products$ | async; track product._id) {
+      <div
+        class="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-0 px-4 sm:px-6 py-5 border-b last:border-b-0 hover:bg-gray-50 transition-colors">
+
+        <div class="lg:col-span-6 flex gap-4 items-center">
+          <img [src]="product.images[0]" class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover" />
+          <div class="min-w-0 flex-1">
+            <h2 class="font-bold uppercase text-sm sm:text-base truncate">
+              {{ product.product_name }}
+            </h2>
+            <p class="text-xs text-gray-700 truncate">
+              Sizes: {{ product.sizes }}
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 flex lg:flex-col justify-between lg:justify-center items-center lg:items-start">
+          <div class="font-bold text-sm sm:text-base">
+            ${{ product.offer_price }}
+          </div>
+          <div class="line-through text-xs text-gray-600">
+            ₹{{ product.price }}
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 text-emerald-500 font-semibold text-sm flex items-center">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2 lg:hidden"></span>
+          {{ product.stock }} In Stock
+        </div>
+
+        <div class="flex items-center justify-start lg:justify-center gap-3">
+          <button (click)="openEditModal(product)"
+            class="flex-1 lg:flex-none border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition">
+            Edit
+          </button>
+          <button (click)="openDeleteModal(product._id)"
+            class="flex-1 lg:flex-none border border-red-400 text-red-500 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition">
+            Delete
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div *ngIf="showEditModal"
+    class="fixed inset-0 bg-black/60 z-150 flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+
+    <div class="bg-white w-full max-w-2xl p-6 sm:p-8 rounded-3xl relative my-8">
+      <button (click)="closeModal()"
+        class="absolute top-4 right-4 text-xl hover:bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center">
+        ✕
+      </button>
+
+      <h2 class="text-xl sm:text-2xl font-bold mb-6">Edit Product</h2>
+
+      <p class="text-xs font-bold text-gray-400 uppercase mb-2">Current Images</p>
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">
+        <div *ngFor="let img of selectedProduct.images; let i = index" class="relative group">
+          <img [src]=" img" class="h-20 sm:h-24 w-full object-cover rounded-lg border" />
+          <button (click)="removeExistingImage(i)"
+            class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs shadow-lg">
+            ✕
+          </button>
+        </div>
+
+        <label
+          class="flex items-center justify-center h-20 sm:h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-black transition">
+          <span class="text-2xl text-gray-400">+</span>
+          <input type="file" hidden multiple (change)="onImagesChange($event)" />
+        </label>
+      </div>
+
+      <div *ngIf="previewImages.length" class="mb-6">
+        <p class="text-xs font-bold text-gray-400 uppercase mb-2">New Uploads</p>
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+          <div *ngFor="let img of previewImages; let i = index" class="relative">
+            <img [src]="img" class="h-20 sm:h-24 w-full object-cover rounded-lg border" />
+            <button (click)="removePreviewImage(i)"
+              class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs shadow-lg">
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-gray-400 uppercase ml-1">Product Title</label>
+          <input [(ngModel)]="selectedProduct.product_name"
+            class="w-full border rounded-lg px-4 py-3 text-sm sm:text-base focus:ring-2 focus:ring-black outline-none"
+            placeholder="Product Name" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase ml-1">Price</label>
+            <input type="number" [(ngModel)]="selectedProduct.price"
+              class="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+              placeholder="Price" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase ml-1">Offer Price</label>
+            <input type="number" [(ngModel)]="selectedProduct.offer_price"
+              class="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+              placeholder="Offer Price" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase ml-1">In Stock</label>
+            <input type="number" [(ngModel)]="selectedProduct.stock"
+              class="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+              placeholder="Stock" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase ml-1">Available Sizes</label>
+            <input type="text" [(ngModel)]="selectedProduct.sizes"
+              class="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+              placeholder="Sizes (S, M, L, XL)" />
+          </div>
+        </div>
+
+        <button [disabled]="isUpdating" (click)="updateProduct()"
+          class="w-full bg-[#0f172a] text-white py-4 rounded-xl disabled:opacity-50 font-bold text-lg mt-4 shadow-xl active:scale-[0.98] transition">
+          {{ isUpdating ? 'Updating...' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showDeleteModal" class="fixed inset-0 z-[200] flex justify-center items-center bg-black/60 p-4">
+    <div class="relative w-full max-w-md">
+      <div class="relative p-6 text-center bg-white rounded-3xl shadow-2xl">
+        <button type="button" (click)="closeDeleteModal()"
+          class="absolute top-4 right-4 text-gray-400 hover:text-black transition">
+          ✕
+        </button>
+
+        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </div>
+
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Confirm Delete</h3>
+        <p class="mb-6 text-gray-500">
+          Are you sure you want to delete this item? This action cannot be undone.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+          <button (click)="closeDeleteModal()"
+            class="order-2 sm:order-1 py-3 px-6 border rounded-xl text-gray-600 font-semibold flex-1 hover:bg-gray-50">
+            No, cancel
+          </button>
+          <button (click)="confirmDelete()"
+            class="order-1 sm:order-2 py-3 px-6 bg-red-600 text-white rounded-xl font-semibold flex-1 hover:bg-red-700 shadow-lg shadow-red-200">
+            Yes, I'm sure
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

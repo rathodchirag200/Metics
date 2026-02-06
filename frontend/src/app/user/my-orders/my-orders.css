@@ -1,0 +1,7 @@
+@media screen and (max-width: 500px) {
+  .top-order {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+}

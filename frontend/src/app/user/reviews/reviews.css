@@ -1,0 +1,8 @@
+swiper-container::part(button-prev),
+swiper-container::part(button-next) {
+  color: #555;
+}
+
+swiper-container::part(pagination-bullet-active) {
+  background: black;
+}

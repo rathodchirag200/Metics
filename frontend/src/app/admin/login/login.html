@@ -1,0 +1,53 @@
+<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 px-4 py-10">
+
+  <div class="w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+
+
+    <div class="hidden md:flex relative items-center justify-center bg-black text-white">
+      <img src="/fash.jpg" alt="Brand" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+    </div>
+
+    <div class="flex items-center justify-center p-10 sm:p-14">
+      <div class="w-full max-w-md">
+
+        <h1 class="text-3xl font-bold text-center mb-2">
+          Login
+        </h1>
+        <p class="text-gray-500 text-sm text-center mb-8">
+          Access your account
+        </p>
+
+        <form (ngSubmit)="login()" class="space-y-6">
+
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              Email address
+            </label>
+            <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-black focus:ring-1 focus:ring-black outline-none transition" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              Password
+            </label>
+            <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-black focus:ring-1 focus:ring-black outline-none transition" />
+          </div>
+
+
+          <p *ngIf="error" class="text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
+            {{ error }}
+          </p>
+
+          <button type="submit" [disabled]="loading"
+            class="w-full bg-black text-white py-3 rounded-xl font-semibold tracking-wide hover:bg-gray-900 transition disabled:opacity-60 disabled:cursor-not-allowed">
+            {{ loading ? 'Logging in...' : 'Login' }}
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>

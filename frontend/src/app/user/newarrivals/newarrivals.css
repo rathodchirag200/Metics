@@ -1,0 +1,27 @@
+.product-swiper::part(button-prev),
+.product-swiper::part(button-next) {
+  background-color: transparent;
+  color: #000;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-swiper::part(button-prev)::after,
+.product-swiper::part(button-next)::after {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.product-swiper:hover::part(button-prev),
+.product-swiper:hover::part(button-next) {
+  opacity: 1;
+}
+
+.product-swiper::part(button-prev) {
+  left: 5px;
+}
+.product-swiper::part(button-next) {
+  right: 5px;
+}

@@ -1,0 +1,66 @@
+<div class="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+
+  <div *ngIf="loading" class="text-center py-10">Loading orders...</div>
+
+  <div *ngFor="let order of orders" class="bg-white rounded-lg shadow border mb-6 overflow-hidden">
+
+    <!-- TOP ORDER INFO -->
+    <div class="top-order p-4 sm:p-5 border-b space-y-2 text-left flex items-center justify-between">
+      <div>
+        <div>
+          <p class="text-sm text-gray-500">Order ID</p>
+          <p class="font-bold text-sm sm:text-base break-all">{{ order._id }}</p>
+        </div>
+
+        <p class="text-sm">Order Date: {{ order.createdAt | date:'medium' }}</p>
+        <p class="text-sm">Payment: {{ order.paymentmethod }}</p>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-2 pt-1 w-full">
+          <span class="font-semibold text-sm">Status:</span>
+          <span class="px-3 py-1 rounded border text-green-600 border-green-600 text-sm">
+            {{ order.orderStatus }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 sm:px-5 py-3 border-b">
+      <h3 class="text-sm font-bold text-gray-800 uppercase">Items</h3>
+    </div>
+
+    <div *ngFor="let item of order.items"
+      class="flex px-4 sm:px-5 py-4 border-b border-gray-800  justify-between items-center">
+
+      <div class="flex gap-4 items-start">
+
+        <img [src]="item.productId.images[0]"
+          class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded border shrink-0" />
+
+        <div class="text-sm sm:text-base">
+          <p class="font-bold leading-tight">
+            {{ item.productId.product_name }}
+          </p>
+          <p class="text-sm text-gray-600">
+            ₹{{ item.price }} × {{ item.quantity }}
+          </p>
+        </div>
+
+      </div>
+
+      <p class="font-bold text-lg text-gray-900">
+        ₹{{ item.price * item.quantity }}
+      </p>
+
+    </div>
+
+    <div class="px-4 sm:px-5 py-4 border-t border-gray-300   flex justify-between items-center">
+      <p class="text-sm font-semibold text-gray-700">Order Total</p>
+      <p class="font-black text-xl text-gray-900">
+        ₹{{ getOrderTotal(order) }}
+      </p>
+    </div>
+
+  </div>
+</div>

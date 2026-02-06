@@ -1,0 +1,100 @@
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="flex justify-between items-center mb-10">
+    <h2 class="text-xl font-semibold">SHOP</h2>
+
+    <select [(ngModel)]="sortValue" (change)="applyFilters()" class="border px-4 py-2 text-sm">
+      <option value="default">Default sorting</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10">
+
+
+    <aside class="space-y-8">
+
+
+      <div class="flex">
+        <input [(ngModel)]="searchText" (input)="applyFilters()" type="text" placeholder="Search..."
+          class="w-full border px-4 py-2 text-sm outline-none" />
+        <button class="bg-blue-500 text-white relative right-0.5 px-2 py-1">
+          <img src="/search6.png" class="w-12" alt="" />
+        </button>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-3">Category</h4>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleCategory('Men')" />
+          Men
+        </label>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleCategory('Women')" />
+          Women
+        </label>
+      </div>
+
+
+      <div>
+        <h4 class="font-semibold mb-3">Sub Category</h4>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleSubCategory('Topwear')" />
+          Topwear
+        </label>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleSubCategory('Best Sellers')" />
+          Best Sellers
+        </label>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleSubCategory('Dresses')" />
+          Dresses
+        </label>
+
+        <label class="flex items-center gap-2 text-sm mb-2">
+          <input type="checkbox" (change)="toggleSubCategory('New Arrivals')" />
+          New Arrivals
+        </label>
+      </div>
+
+    </aside>
+
+
+    <div *ngIf="filteredProducts.length > 0; else noProducts" class="grid grid-cols-2 md:grid-cols-3 gap-8">
+
+      <div *ngFor="let p of filteredProducts" [routerLink]="['/product', p._id]" class="cursor-pointer">
+        <div class="relative group overflow-hidden mb-3">
+          <img [src]="p.images[0]" class="w-full object-cover transition group-hover:scale-105" />
+        </div>
+
+        <h3 class="text-sm font-medium mb-1">
+          {{ p.product_name }}
+        </h3>
+
+        <div class="text-sm">
+          <span *ngIf="p.offer_price < p.price" class="line-through text-gray-400 mr-2">
+            ${{ p.price }}
+          </span>
+          <span class="font-semibold">
+            ${{ p.offer_price }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+    <ng-template #noProducts>
+      <div class="flex items-center justify-center h-64 w-full">
+        <p class="text-gray-500 text-sm">
+          No products found
+        </p>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

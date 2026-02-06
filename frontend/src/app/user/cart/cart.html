@@ -1,0 +1,191 @@
+<div *ngIf="loading" class="flex flex-col justify-center items-center h-[70vh] text-gray-500">
+  <div class="w-14 h-14 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+  <p class="text-lg font-medium animate-pulse">Fetching your cart...</p>
+</div>
+
+<div *ngIf="!loading && (!cart || !cart.items || cart.items.length === 0)"
+  class="flex flex-col justify-center items-center h-[70vh] text-center px-4 animate-fade-in">
+  <div class="bg-gray-100 p-8 rounded-full mb-6">
+    <span class="text-7xl">🛍️</span>
+  </div>
+  <h2 class="text-2xl md:text-3xl font-black text-gray-800 mb-2">Your Cart is Empty</h2>
+  <p class="text-gray-500 mb-8 max-w-sm">Looks like you haven't added anything yet.</p>
+  <button routerLink="/shop"
+    class="bg-green-600 text-white px-8 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg hover:bg-green-700 transition active:scale-95">
+    Start Shopping →
+  </button>
+</div>
+
+<div *ngIf="cart && cart.items?.length > 0 && !loading" class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+  <h1 class="text-3xl sm:text-4xl font-bold mb-8 text-gray-800">Shopping Cart</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <div class="lg:col-span-2 space-y-5">
+      <div *ngFor="let item of cart.items"
+        class="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-2xl p-5 shadow-sm border hover:shadow-md transition">
+
+        <div class="shrink-0 flex justify-center">
+          <img [src]="item.productId.images[0]"
+            class="w-32 h-32 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-xl shadow-sm" />
+        </div>
+
+        <div class="flex-1 flex flex-col justify-between text-center sm:text-left">
+          <div>
+            <h3 class="font-bold text-lg text-gray-800 leading-tight">
+              {{ item.productId.product_name }}
+            </h3>
+            <p class="text-green-600 font-semibold mt-1">${{ item.price }}</p>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-4">
+            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-full shadow-sm overflow-hidden">
+              <button (click)="decrease(item)" [disabled]="item.quantity <= 1" class="w-10 h-10 flex justify-center items-center text-lg font-bold
+         text-gray-600 hover:bg-gray-200
+         disabled:opacity-40 disabled:cursor-not-allowed
+         transition">
+                −
+              </button>
+
+
+              <span class="w-10 text-center font-bold text-gray-800">{{ item.quantity }}</span>
+              <button (click)="increase(item)"
+                class="w-10 h-10 flex justify-center items-center text-lg font-bold text-gray-600 hover:bg-gray-200 transition">+</button>
+            </div>
+
+            <button (click)="remove(item)"
+              class="text-red-500 hover:text-red-700 text-sm font-bold uppercase tracking-wider">
+              Remove
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="text-center sm:text-right flex flex-row sm:flex-col justify-between sm:justify-center border-t sm:border-0 pt-3 sm:pt-0">
+          <span class="text-gray-400 text-xs uppercase font-black sm:mb-1">Total</span>
+          <span class="font-black text-xl text-gray-900">
+            ${{ (item.price * item.quantity).toFixed(2) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button (click)="clearCart()" class="text-red-500 hover:underline font-bold px-2 text-sm">
+          Empty Entire Cart
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+
+      <div class="bg-white border rounded-2xl p-5 shadow-sm">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-bold text-gray-800">Delivery Address</h2>
+          <button routerLink="/address" class="text-green-600 text-sm font-bold hover:underline">+ Add New</button>
+        </div>
+        <select [(ngModel)]="selectedAddressId" name="selectedAddressId"
+          class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-700 font-medium">
+
+          <option value="">
+            -- Choose Address --
+          </option>
+
+          <option *ngFor="let address of addresses" [value]="address._id">
+            {{ address.state }}, {{ address.city }} , {{address.pin}}
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="bg-white rounded-2xl border p-6 shadow-sm sticky top-6">
+        <h2 class="text-xl font-bold mb-6 text-gray-800">Order Summary</h2>
+
+        <div class="space-y-4 text-gray-600">
+          <div class="flex justify-between">
+            <span class="font-medium">Subtotal</span>
+            <span class="font-bold text-gray-800">${{ cart.subtotal.toFixed(2) }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Shipping</span>
+            <span class="font-bold text-green-600">${{ shipping > 0 ? shipping.toFixed(2) : 'FREE' }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Tax (2%)</span>
+            <span class="font-bold text-gray-800">${{ cart.tax.toFixed(2) }}</span>
+          </div>
+
+          <hr class="border-dashed border-gray-200">
+
+          <div class="flex justify-between text-xl font-black">
+            <span class="text-gray-800">Total</span>
+            <span class="text-green-600">${{ cart.total.toFixed(2) }}</span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="mr-4">
+            <input type="radio" [(ngModel)]="paymentmethod" value="COD" name="paymentmethod" checked />
+            COD
+          </label>
+          <label class="mr-4">
+            <input type="radio" [(ngModel)]="paymentmethod" value="stripe" name="paymentmethod" />
+            Stripe
+          </label>
+          <label>
+            <input type="radio" [(ngModel)]="paymentmethod" value="razorpay" name="paymentmethod" />
+            Razorpay
+          </label>
+        </div>
+
+
+        <button (click)="checkout()"
+          class="w-full mt-8 bg-gray-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-black transition">
+          Proceed to Checkout
+        </button>
+
+
+        <div class="flex items-center justify-center gap-2 mt-4">
+          <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Secure Payment via</span>
+          <span class="font-bold text-blue-600 text-sm italic">Stripe</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="showSuccessModal" class="fixed inset-0 z-50 flex items-center justify-center bg-white backdrop-blur-sm">
+
+  <div class="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center animate-fade-in">
+
+    <div class="mb-4">
+      <div class="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-green-100 text-green-600 text-4xl">
+        ✓
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-black text-gray-800 mb-2">
+      Order Placed Successfully!
+    </h2>
+
+    <p class="text-gray-500 mb-6">
+      Thank you for your purchase. Your order has been placed and is being processed.
+    </p>
+
+    <div class="flex gap-4 justify-center">
+      <button (click)="closeModal()"
+        class="px-6 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 transition">
+        View Orders
+      </button>
+
+      <button (click)="goToShop(); showSuccessModal=false"
+        class="px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-bold hover:bg-gray-300 transition">
+        Continue Shopping
+      </button>
+    </div>
+
+  </div>
+</div>

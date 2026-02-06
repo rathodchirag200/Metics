@@ -1,0 +1,45 @@
+<div class="flex flex-col gap-2 items-center justify-center relative">
+
+  <div class="w-full ">
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+      <div class="flex items-center gap-6">
+        <div class="flex-1 h-px bg-[#e5e5e5]"></div>
+        <h2 class="text-[25px] sm:text-[26px] font-bold tracking-wide whitespace-nowrap">
+          NEW ARRIVALS
+        </h2>
+        <div class="flex-1 h-px bg-[#e5e5e5]"></div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+    <div class="w-10 h-10 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+  </div>
+
+  <swiper-container #swiper [style.visibility]="loading ? 'hidden' : 'visible'" slides-per-view="3" space-between="20"
+    loop="true" navigation="true" class="max-w-7xl w-full px-4 product-swiper" breakpoints='{
+      "0": { "slidesPerView": 1 },
+      "640": { "slidesPerView": 2 },
+      "1024": { "slidesPerView": 4 }
+    }'>
+
+    <swiper-slide *ngFor="let product of products">
+      <div class="group cursor-pointer">
+        <div class="relative overflow-hidden" [routerLink]="['/product', product._id]">
+          <img [src]="product.images[0]" class="w-full  object-cover"
+            [alt]="product.product_name" />
+        </div>
+
+        <p class="mt-4 text-sm font-medium uppercase">
+          {{ product.product_name }}
+        </p>
+
+        <p class="text-sm font-bold mt-1">
+          ${{ product.price }}
+        </p>
+      </div>
+    </swiper-slide>
+
+  </swiper-container>
+
+</div>

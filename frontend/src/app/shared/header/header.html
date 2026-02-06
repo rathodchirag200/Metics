@@ -1,0 +1,138 @@
+<div class="w-full">
+
+  <div class="bg-black text-white font-bold py-1.5 text-[13px] flex items-center justify-center w-full">
+    FREE SHIPPING ON ORDERS ABOVE $40
+  </div>
+
+  <div class="w-full bg-white border-b relative z-50">
+    <div class="max-w-337.5 mx-auto flex items-center justify-between py-4 px-4">
+
+      <!-- Mobile Menu Icon -->
+      <div class="lg:hidden flex items-center">
+        <img src="/menu.png" class="w-7 cursor-pointer" (click)="toggleMenu()" alt="menu" />
+      </div>
+
+      <!-- Desktop Nav -->
+      <ul class="hidden lg:flex gap-6 text-[16px] font-bold list-none">
+        <li routerLink="/shop" class="cursor-pointer">SHOP</li>
+        <li routerLink="/blog" class="cursor-pointer">BLOG</li>
+        <li routerLink="/about" class="cursor-pointer">ABOUT</li>
+        <li routerLink="/my-orders" class="cursor-pointer">ORDERS</li>
+        <li routerLink="/contact" class="cursor-pointer">CONTACT</li>
+      </ul>
+
+      <!-- Logo -->
+      <div class="flex justify-center">
+        <img routerLink="/" src="/1.png" class="w-30 cursor-pointer" alt="logo">
+      </div>
+
+      <div class="flex items-center gap-6">
+
+        <div class="flex gap-5 items-center">
+
+          <img src="/search2.png" class="w-5 cursor-pointer hidden lg:block" alt="search">
+
+
+          @if (authService.currentUser()) {
+          <div class="relative group">
+
+            <img [src]="authService.currentUser().images"
+              class="w-9 h-9 rounded-full object-cover border border-gray-200 cursor-pointer" alt="user profile">
+
+            <div class="absolute right-0 top-full h-3 w-40"></div>
+
+            <div class="absolute right-0 top-full mt-3 w-56 bg-white border rounded-2xl shadow-xl
+                     opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                     transition duration-200">
+
+              <a routerLink="/profile" class="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-gray-100">
+                <img src="/account.png" class="w-4 h-4" alt="profile">
+                Profile
+              </a>
+
+              <a routerLink="/my-orders" class="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-gray-100">
+                <img src="/order.png" class="w-4 h-4" alt="orders">
+                Orders
+              </a>
+
+              <a routerLink="/cart" class="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-gray-100">
+                <img src="/cart.png" class="w-4 h-4" alt="cart">
+                Cart
+              </a>
+
+              <div class="border-t"></div>
+
+              <button (click)="authService.logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium
+                       hover:bg-gray-100 text-red-600">
+                <img src="/logout.png" class="w-4 h-4" alt="logout">
+                Logout
+              </button>
+
+            </div>
+          </div>
+          } @else {
+          <img routerLink="/login" src="/account.png" class="w-5 cursor-pointer" alt="account">
+          }
+
+        </div>
+
+        <div class=" items-center justify-center gap-2 pl-5 border-l hidden lg:flex">
+          <div class="relative cursor-pointer" routerLink="/cart">
+            <img routerLink="/cart" src="/cart.png" class="w-9 cursor-pointer" alt="cart">
+            <span class="absolute bottom-0.5 left-1.75 w-5 h-5 text-[12px] font-bold flex items-center justify-center">
+              {{ cartCount }}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 lg:hidden">
+          <div class="relative cursor-pointer" routerLink="/cart">
+            <img routerLink="/cart" src="/cart.png" class="w-9 cursor-pointer" alt="cart">
+            <span class="absolute bottom-0.5 left-1.75 w-5 h-5 text-[12px] font-bold flex items-center justify-center">
+              {{ cartCount }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black/40 transition-opacity duration-300 lg:hidden" [class.opacity-100]="isMenuOpen"
+      [class.opacity-0]="!isMenuOpen" [class.pointer-events-none]="!isMenuOpen" (click)="closeMenu()">
+    </div>
+
+    <div class="fixed top-0 left-0 h-full w-72 bg-white shadow-xl transform
+             transition-transform duration-300 ease-in-out lg:hidden z-50" [class.-translate-x-full]="!isMenuOpen"
+      [class.translate-x-0]="isMenuOpen">
+
+      <div class="p-5 flex justify-between items-center border-b">
+      <img src="/1.png" class="w-20" alt="">
+        <button class="text-xl" (click)="closeMenu()">
+          <img src="/close.png" class="w-8" alt="">
+        </button>
+      </div>
+
+      <ul class="flex flex-col gap-5 p-5 text-[15px] font-bold">
+
+        <li routerLink="/shop" (click)="closeMenu()">SHOP</li>
+        <li routerLink="/blog" (click)="closeMenu()">BLOG</li>
+        <li routerLink="/about" (click)="closeMenu()">ABOUT</li>
+        <li routerLink="/my-orders" (click)="closeMenu()">ORDERS</li>
+        <li routerLink="/contact" (click)="closeMenu()">CONTACT</li>
+
+        <li routerLink="/cart" (click)="closeMenu()">CART</li>
+
+        @if (authService.currentUser()) {
+        <li (click)="authService.logout(); closeMenu()" class="text-red-600">
+          LOGOUT
+        </li>
+        } @else {
+        <li routerLink="/login" (click)="closeMenu()">LOGIN</li>
+        }
+
+      </ul>
+
+    </div>
+
+  </div>
+</div>
